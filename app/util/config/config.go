@@ -6,49 +6,49 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type execConfig struct {
-	doMiguration bool `yaml:"do_miguration"`
+type ExecConfig_ struct {
+	DoMiguration_ bool `yaml:"do_miguration"`
 }
 
-func (ec execConfig) DoMiguration() bool {
-	return ec.doMiguration
+func (ec ExecConfig_) DoMiguration() bool {
+	return ec.DoMiguration_
 }
 
-type sqlConfig struct {
-	user string `yaml:"user"`
-	pass string `yaml:"pass"`
-	host string `yaml:"host"`
-	name string `yaml:"name"`
-	port uint   `yaml:"port"`
+type SQLConfig_ struct {
+	User_ string `yaml:"user"`
+	Pass_ string `yaml:"pass"`
+	Host_ string `yaml:"host"`
+	Name_ string `yaml:"name"`
+	Port_ uint   `yaml:"port"`
 }
 
-func (sc sqlConfig) User() string {
-	return sc.user
+func (sc SQLConfig_) User() string {
+	return sc.User_
 }
-func (sc sqlConfig) Pass() string {
-	return sc.pass
+func (sc SQLConfig_) Pass() string {
+	return sc.Pass_
 }
-func (sc sqlConfig) Host() string {
-	return sc.host
+func (sc SQLConfig_) Host() string {
+	return sc.Host_
 }
-func (sc sqlConfig) Name() string {
-	return sc.name
+func (sc SQLConfig_) Name() string {
+	return sc.Name_
 }
-func (sc sqlConfig) Port() uint {
-	return sc.port
-}
-
-type appConfig struct {
-	execConfig `yaml:"exec_config"`
-	sqlConfig  `yaml:"sql_config"`
+func (sc SQLConfig_) Port() uint {
+	return sc.Port_
 }
 
-func (ac appConfig) ExecConfig() ExecConfig {
-	return ac.execConfig
+type AppConfig_ struct {
+	Ec ExecConfig_ `yaml:"exec_config"`
+	Sc SQLConfig_  `yaml:"sql_config"`
 }
 
-func (ac appConfig) SQLConfig() SQLConfig {
-	return ac.sqlConfig
+func (ac AppConfig_) ExecConfig() ExecConfig {
+	return ac.Ec
+}
+
+func (ac AppConfig_) SQLConfig() SQLConfig {
+	return ac.Sc
 }
 
 const (
@@ -64,8 +64,12 @@ func NewAppConfig() (AppConfig, error) {
 
 	defer f.Close()
 
-	var ac appConfig
+	var ac AppConfig_
 
 	err = yaml.NewDecoder(f).Decode(&ac)
-	return ac, err
+	if err != nil {
+		panic(err)
+	}
+
+	return ac, nil
 }
