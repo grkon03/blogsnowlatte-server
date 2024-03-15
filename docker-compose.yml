@@ -3,8 +3,11 @@ version: "3"
 services:
   app:
     build: ./app
+    restart: always
     ports:
       - "3111:3111"
+    volumes:
+      - ./util/configdata/config.yml:/snlt/config.yml
     depends_on:
       - sql
 
@@ -18,9 +21,9 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: password
       MARIADB_DATABASE: snltdb
-      MARIADB_USER: snlt
+      MARIADB_USERNAME: snlt
       MARIADB_PASSWORD: snlt01
-      TZ: "Asia/Tokyo"
+      # TZ: "Asia/Tokyo"
     volumes:
       - ./sql/init:/docker-entrypoint-initdb.d
       - ./sql/data:/var/lib/mysql

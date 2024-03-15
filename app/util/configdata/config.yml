@@ -1,0 +1,8 @@
+exec_config:
+  do_miguration: true
+sql_config:
+  user: 'root'
+  pass: 'password'
+  host: 'sql'
+  name: 'snltdb'
+  port: 3306
